@@ -51,5 +51,22 @@ module.exports = app => {
         res.send(false)
     }
 
-    return { signin, validateToken }
+    const validateAdmin = async (req, res) => {
+        const userData = req.body || null
+        try {
+            if(userData) {
+                const token = jwt.decode(userData.token, authSecret)
+                if(token.admin === true) {
+                    return res.send(true)
+                } 
+            }
+        } catch(e) {
+            // problema com o token
+        }
+
+        res.send(false)
+    }
+
+
+    return { signin, validateToken, validateAdmin }
 }
